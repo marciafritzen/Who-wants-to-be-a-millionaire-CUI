@@ -88,9 +88,4 @@ During World War 1 How many people died?
 2) 11 million
 3) 37 million
 4) 1.5 million
-During World War 1 How many people died?
-3
-1) 26 million
-2) 11 million
-3) 37 million
-4) 1.5 million
+
