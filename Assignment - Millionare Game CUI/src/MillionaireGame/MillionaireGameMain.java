@@ -21,16 +21,17 @@ public class MillionaireGameMain {
     
        public static void main(String[] args) throws IOException {
         System.out.println("=========================\n   WHO WANTS TO BE A MILLIONAIRE  \n=============================");
-        System.out.println("INSTRUCTIONS: 1) For choosing answers please input the integer 'OPTION' corresponding to your answer\n       "
-                            +"       2) You may use the 50/50 lifeline up to 3 times \n"
-                            + "      3) You may also pass on a question 1 time, this will give you a new question");
+        System.out.println("INSTRUCTIONS: 1) For choosing answers please input the integer 'OPTION' corresponding to your answer\n"
+                            +"              2) 3 lifelines each of which you can only use once \n"
+                            + "              ");
 
                 
-        System.out.println("RULES: In Who wants to be a millionaire there are 2 safe havens and 15 questions");
-        System.out.println(" - If the player answers any question incorrectly the game will end");
-        System.out.println(" - However if user answers 5 question correctly the player is gaurenteed $1000");
-        System.out.println("   and at 10 questions answer correctly player will be gaurenteed to walk away with $32000 ");
-        System.out.println(" - question will get more diffcult as the player progresses");
+        System.out.println("       RULES: In Who wants to be a millionaire there are 2 safe havens and 15 questions");
+        //System.out.println("               ");
+        System.out.println("               - If the player answers any question incorrectly the game will end");
+        System.out.println("               - However if user answers 5 question correctly the player is gaurenteed $1000");
+        System.out.println("                 and at 10 questions answer correctly player will be gaurenteed to walk away with $32000 ");
+        System.out.println("               - Questions are ramdomised and do not get more difficult");
 
         
 

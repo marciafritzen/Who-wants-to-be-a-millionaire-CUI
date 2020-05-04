@@ -7,7 +7,7 @@ package MillionaireGame;
  */
 public enum Lifeline {
     
-    FiftyFity("50/50");
+    FiftyFity("50/50") ,CallAFriend("Call A Friend"), PassQuestion("Pass Question");
    
     private final String lifeLineName;
     
