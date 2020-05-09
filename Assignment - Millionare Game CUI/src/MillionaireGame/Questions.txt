@@ -10,7 +10,7 @@ The golden ratio is 1:1.618 but what is the silver ratio?
 2) 1:1.414
 3) 1:1.3.303
 4) 1:1.543
-Which of the following countryies has a dragon on their national flag?
+Which of the following countries has a dragon on their national flag?
 3
 1)Scotland
 2)England
@@ -88,9 +88,10 @@ Buffon and Hamilton are names of craters on which celestial body?
 2)The Sun
 3)Jupiter
 4)Mars
-In 1701 which famous British Scientist pulished his law of cooling?
+In 1701 which famous British Scientist publish his law of cooling?
 4
 1)Charles Babbage
 2)Charles Cabbage
 3)Robbie Savage
 4)Isaac Newton
+

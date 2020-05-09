@@ -6,8 +6,7 @@
 package MillionaireGame;
 
 /**
- *
- * @author Paul
+ * @author Paul Vu 17981406, Peter Ho 17978553
  */
 public class Question {
 //the question class serves to hold a single question with multiple answers but only 1 correct answer

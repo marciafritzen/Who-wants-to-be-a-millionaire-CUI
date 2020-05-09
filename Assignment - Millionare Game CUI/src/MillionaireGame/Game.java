@@ -9,8 +9,7 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 /**
  *
- * @author Paul Vu 17981406, Peter Ho 
- * 
+ * @author Paul Vu 17981406, Peter Ho 17978553
  */
 public class Game {
     // this class handles playerArrays and questionArray classes to create millionaire game
@@ -41,10 +40,8 @@ public class Game {
         this.player = player;
     }
 
-    /**
-     * Starts the game
-     */
-    public void StartGame(Scanner scan) throws IOException, InterruptedException {
+//starts game contains core game loop
+    public void CoreGame(Scanner scan) throws IOException, InterruptedException {
         System.out.println("Please enter your name(or if you are a returning player enter 'returning'): "); 
         player.setPlayerName(scan.nextLine().trim());
         
@@ -54,20 +51,20 @@ public class Game {
             for(int i = 0; i < playerArray.getPlayerArray().size(); i ++){
                 System.out.println((i + 1) +") " + playerArray.getPlayerArray().get(i).getPlayerName() + " Money Won by player:  $" + playerArray.getPlayerArray().get(i).getTotalMoney());
             }
-            int userAns;
+            int userInput;
             try {
                 System.out.println("\n Select your player save slot or enter '0' to go enter as a new player");
-                userAns = scan.nextInt();
+                userInput = scan.nextInt();
                 
-                if (this.isInputValid(userAns) == true && (userAns < playerArray.getPlayerArray().size())) {
-                    switch (userAns) {
+                if (this.isInputValid(userInput) == true && (userInput < playerArray.getPlayerArray().size())) {
+                    switch (userInput) {
                         case 0:
                                 System.out.println("Please enter your name: "); 
                                 player.setPlayerName(scan.nextLine().trim());
                                 playerArray.newPlayer(player, player.getPlayerName());
                             break;
                         default:
-                           player = playerArray.getPlayerArray().get(userAns - 1);
+                           player = playerArray.getPlayerArray().get(userInput - 1);
                             break;
                     }
                 } else {
@@ -77,20 +74,18 @@ public class Game {
                 System.out.println("Invalid input. Please input a integer answer.");
                 scan.next();
             }
-
         }
         
         //questionaire game loop
         do {
             System.out.println("This is a $" + player.getPrizes()[prizeCount + 1] + " dollar question");
-           
             System.out.println("Input '0' to quit and leave with the money you have won so far ($:" + player.getPrizes()[this.getpCount()] + ")\n");
             System.out.println("Question : " + questionsArray.getQuestionsArray().get(this.getqCounter()));
-            int userAns;
+            int userInput;
             try {
-                userAns = scan.nextInt();
-                if (this.isInputValid(userAns) == true) {
-                    switch (userAns) {
+                userInput = scan.nextInt();
+                if (this.isInputValid(userInput) == true) {
+                    switch (userInput) {
                         case 5:
                             this.chooseLifeline();
                             break;
@@ -98,19 +93,16 @@ public class Game {
                             walkAway(player, this.getqCounter());
                             break;
                         default:
-                            this.checkAnswer(player, this.getqCounter(), userAns);
+                            this.checkAnswer(player, this.getqCounter(), userInput);
                             break;
                     }
                 } else {
                     System.out.println("Invalid Input, please input the  integer option corresponding to your answer carefully");
-
                 }
-
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please input a integer answer.");
                 scan.next();
             }
-
         } while (this.getGameActive());
     }
 
@@ -119,6 +111,7 @@ public class Game {
         if (this.questionsArray.getQuestionsArray().get(this.getqCounter()).getAnswers().length == 2) {
             int optionOne = Character.getNumericValue(this.questionsArray.getQuestionsArray().get(this.getqCounter()).getAnswers()[0].charAt(0));
             int optionTwo = Character.getNumericValue(this.questionsArray.getQuestionsArray().get(this.getqCounter()).getAnswers()[1].charAt(0));
+            
             if (userAns == optionOne || userAns == optionTwo || userAns == 0) {
                 this.setIsValid(true);
             } else {
@@ -132,62 +125,57 @@ public class Game {
             }
         }
         return this.IsValid();
-
     }
     
     //walk away method ends the game and writes player data to playerdata.txt
     public void walkAway(Player player, int counter) throws IOException {
-        playerArray.removeExistingPlayer(player);
         player.setTotalMoney(player.getTotalMoney() + player.getPrizes()[counter]);
         System.out.println("You decided to walk away with $:" + player.getPrizes()[counter]);
         System.out.println("Player: " + player.toString());
         playerArray.getPlayerArray().add(new Player(player.getPlayerName(), player.getTotalMoney()));
-        PlayerDataWriter.savePlayers(playerArray);
+        FileReadWriter.savePlayers(playerArray);
         exit(0);
     }
 
     //method is only for the final question of the game and total prize of 1million dollars
     public void correctFinalAnswer(Player player, int counter) throws IOException {
-        playerArray.removeExistingPlayer(player);
         player.setTotalMoney(player.getTotalMoney() + player.getPrizes()[counter + 1]);
         System.out.println("Correct Answer");
         System.out.println("------------------------------------");
-        System.out.println("CONGRATULATIONS! that was the final question you now have $:" + player.getPrizes()[counter + 1]);
-        System.out.println("Player: " + player.toString());
+        System.out.println("CONGRATULATIONS! that was the final question you now have $" + player.getPrizes()[counter + 1]);
         playerArray.getPlayerArray().add(new Player(player.getPlayerName(), player.getTotalMoney()));
-        PlayerDataWriter.savePlayers(playerArray);
+        FileReadWriter.savePlayers(playerArray);
         exit(0);
     }
 
     //incorrect answer ends the game and saves player array
-    public void incorrectAnswer(Player player, int counter) throws IOException {
-        playerArray.removeExistingPlayer(player);        
+    public void incorrectAnswer(Player player, int counter) throws IOException {      
         System.out.println("Incorrect Answer");
         System.out.println("------------------------------------");
-        System.out.println("Game over you lose all of your winnings $" + player.getPrizes()[counter]);
-        
+
         if(counter > 4 ){
             System.out.println("Game over you lose but you did reach the first safe haven therefore you walk away with $1000");
             player.setTotalMoney(1000);
         }
-        if(counter > 9 ){
+        else if(counter > 9 ){
             System.out.println("Game over you lose but you did reach the first safe haven therefore you walk away with $32,000");
             player.setTotalMoney(32000);
         }
-        
+        else{
+            System.out.println("Game over you lose all of your winnings $" + player.getPrizes()[counter]);
+        }
         System.out.println("Player: " + player.toString());
         playerArray.getPlayerArray().add(new Player(player.getPlayerName(), player.getTotalMoney()));
-        PlayerDataWriter.savePlayers(playerArray);
+        FileReadWriter.savePlayers(playerArray);
     }
 
     //check if answer is correct
     public void checkAnswer(Player player, int qcounter, int userAns) throws IOException {
+        //checks answer using question counter
         if (questionsArray.getQuestionsArray().get(qcounter).getCorrectAnswer() == userAns) {
             if (qcounter == questionsArray.getQuestionsArray().size() - 1) {
-                
                 this.correctFinalAnswer(player, qcounter);
             } else {
-                
                 System.out.println("You answered correctly, you now have a total of " + player.getTotalMoney());
                 //updates question and prizes
                 this.setqCounter(this.getqCounter() + 1);
@@ -203,7 +191,7 @@ public class Game {
 
     //fifty fifty life line removes 2 incorrect options off the current question leaving remaining correct answer and 1 incorrect answer
     public Question FiftyFifty(int qcounter) {
-        ArrayList<String> newAns = new ArrayList();
+        ArrayList<String> newQuestionAnswers = new ArrayList();
         ArrayList<String> falseAns = new ArrayList();
         Random rand = new Random();
         String correctAns = "";
@@ -215,15 +203,15 @@ public class Game {
             } else {
                 falseAns.add(questionsArray.getQuestionsArray().get(qcounter).getAnswers()[i]);
             }
-        }
-                
+        }   
+        //after seperating answer and wrong answers can remove 2 wrong answers
         String[] stringfalseAns = falseAns.toArray(new String[3]);
-        newAns.add(correctAns);
-        newAns.add(stringfalseAns[rand.nextInt(falseAns.size())]);
-        Collections.sort(newAns);
+        newQuestionAnswers.add(correctAns);
+        newQuestionAnswers.add(stringfalseAns[rand.nextInt(falseAns.size())]);
+        Collections.sort(newQuestionAnswers);
 
-        String[] stringNewAns = newAns.toArray(new String[2]);
-
+        //creates new question instance with only 2 answers 1 wrong and 1 right
+        String[] stringNewAns = newQuestionAnswers.toArray(new String[2]);
         Question q = new Question(questionsArray.getQuestionsArray().get(qcounter).getQuestion(), stringNewAns, questionsArray.getQuestionsArray().get(qcounter).getCorrectAnswer());
         questionsArray.getQuestionsArray().set(qcounter, q);
 

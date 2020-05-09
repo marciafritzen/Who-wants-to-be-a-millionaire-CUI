@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 /**
- * @author Paul
+ * @author Paul Vu 17981406, Peter Ho 17978553
  */
 public class MillionaireGameMain {
     //this class holds main function which creates instaces
@@ -26,22 +26,17 @@ public class MillionaireGameMain {
         System.out.println("                 and at 10 questions answer correctly player will be gaurenteed to walk away with $32000 ");
         System.out.println("               - Questions are ramdomised and do not get more difficult \n");
 
-        
-
         Player player = new Player("", 0);
         Scanner scanner = new Scanner(System.in);
+        
         
         PlayerArray playerArray = new PlayerArray(); 
         QuestionsArray questionList = new QuestionsArray();
 
-        QuestionReader.loadQuestions(questionList);
-        
-        //randomises questions
-        //Collections.shuffle(questionList.getQuestionsArray());
-        
-        PlayerDataWriter.loadPlayers(playerArray);
+        FileReadWriter.loadQuestions(questionList);
+        FileReadWriter.loadPlayers(playerArray);
         
         Game game = new Game(playerArray,questionList,player);  
-        game.StartGame(scanner);
+        game.CoreGame(scanner);
     }
 }

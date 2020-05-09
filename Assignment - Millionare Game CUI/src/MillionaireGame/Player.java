@@ -1,8 +1,7 @@
 package MillionaireGame;
 
 /**
- *
- * @author Paul
+ * @author Paul Vu 17981406, Peter Ho 17978553
  */
 public class Player {
     

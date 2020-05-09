@@ -2,8 +2,7 @@
 package MillionaireGame;
 
 /**
- *
- * @author Paul
+ * @author Paul Vu 17981406, Peter Ho 17978553
  */
 public enum Lifeline {
     //lifeline class holds ID of different life lines, functionailty of life lines are in the game class

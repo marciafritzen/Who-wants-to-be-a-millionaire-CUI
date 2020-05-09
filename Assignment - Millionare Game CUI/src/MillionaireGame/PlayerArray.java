@@ -2,11 +2,10 @@ package MillionaireGame;
 
 import java.util.ArrayList;
 /**
- *
- * @author Paul
+ * @author Paul Vu 17981406, Peter Ho 17978553
  */
 public class PlayerArray {
-    //playerArray is a arraylist of the player class, acts a data storage to the playerData.txt file with methods which manage contents
+    //playerArray is a arraylist of the player class, acts a data storage to the playerData.txt file
     ArrayList<Player> playerArray;
     
     public PlayerArray(){
@@ -21,14 +20,6 @@ public class PlayerArray {
         return this.playerArray;
     }
     
-    //removes a player from array
-    public void removeExistingPlayer(Player player) {
-        for (int i = 0; i < this.getPlayerArray().size(); i++) {
-            if (this.getPlayerArray().get(i).getPlayerName().trim().toLowerCase().equals(player.getPlayerName().trim().toLowerCase())) {
-                this.getPlayerArray().remove(i);
-            }
-        }
-    }
     
     //creates new player instance
     public Player newPlayer(Player player, String playerName) {
