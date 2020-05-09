@@ -1,4 +1,3 @@
-
 package MillionaireGame;
 import java.io.IOException;
 import static java.lang.System.exit;
@@ -10,9 +9,11 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 /**
  *
- * @author Paul
+ * @author Paul Vu 17981406, Peter Ho 
+ * 
  */
 public class Game {
+    // this class handles playerArrays and questionArray classes to create millionaire game
     
     PlayerArray playerArray;
     QuestionsArray questionsArray;
@@ -31,7 +32,6 @@ public class Game {
     int qCounter = 0;
     int prizeCount = 0;
     
-
     boolean isCorrect = true;
     
     //constructor
@@ -48,15 +48,15 @@ public class Game {
         System.out.println("Please enter your name(or if you are a returning player enter 'returning'): "); 
         player.setPlayerName(scan.nextLine().trim());
         
-        
+        //gets returning player
         if(player.getPlayerName().equals("returning")){
             //display players to choose from
             for(int i = 0; i < playerArray.getPlayerArray().size(); i ++){
-                System.out.println((i + 1) +") " + playerArray.getPlayerArray().get(i).toString() + " Money Won by player:  " + playerArray.getPlayerArray().get(i).getTotalMoney());
+                System.out.println((i + 1) +") " + playerArray.getPlayerArray().get(i).getPlayerName() + " Money Won by player:  $" + playerArray.getPlayerArray().get(i).getTotalMoney());
             }
             int userAns;
             try {
-                System.out.println("Select your player/save slot or enter '0' to go enter as a new player");
+                System.out.println("\n Select your player save slot or enter '0' to go enter as a new player");
                 userAns = scan.nextInt();
                 
                 if (this.isInputValid(userAns) == true && (userAns < playerArray.getPlayerArray().size())) {
@@ -79,7 +79,6 @@ public class Game {
             }
 
         }
-        
         
         //questionaire game loop
         do {
@@ -127,12 +126,12 @@ public class Game {
         exit(0);
     }
 
-    //method updates players prize winnings and continues game
+    //method is only for the final question of the game and total prize of 1million dollars
     public void correctFinalAnswer(Player player, int counter) throws IOException {
         playerArray.removeExistingPlayer(player);
         player.setTotalMoney(player.getTotalMoney() + player.getPrizes()[counter + 1]);
         System.out.println("Correct Answer");
-        System.out.println("==================================================================================");
+        System.out.println("------------------------------------");
         System.out.println("CONGRATULATIONS! that was the final question you now have $:" + player.getPrizes()[counter + 1]);
         System.out.println("Player: " + player.toString());
         playerArray.getPlayerArray().add(new Player(player.getPlayerName(), player.getTotalMoney()));
@@ -140,11 +139,11 @@ public class Game {
         exit(0);
     }
 
-    
+    //incorrect answer ends the game and saves player array
     public void incorrectAnswer(Player player, int counter) throws IOException {
         playerArray.removeExistingPlayer(player);        
         System.out.println("Incorrect Answer");
-        System.out.println("==================================================================================");
+        System.out.println("------------------------------------");
         System.out.println("Game over you lose all of your winnings $" + player.getPrizes()[counter]);
         
         if(counter > 4 ){
@@ -161,7 +160,7 @@ public class Game {
         PlayerDataWriter.savePlayers(playerArray);
     }
 
-
+    //check if answer is correct
     public void checkAnswer(Player player, int qcounter, int userAns) throws IOException {
         if (questionsArray.getQuestionsArray().get(qcounter).getCorrectAnswer() == userAns) {
             if (qcounter == questionsArray.getQuestionsArray().size() - 1) {
@@ -170,7 +169,7 @@ public class Game {
             } else {
                 
                 System.out.println("You answered correctly, you now have a total of " + player.getTotalMoney());
-                //
+                //updates question and prizes
                 this.setqCounter(this.getqCounter() + 1);
                 this.setpCount(this.getpCount() + 1);
             }
@@ -180,6 +179,7 @@ public class Game {
         }
     }
 
+    //check for valid input returns a boolean
     public boolean isInputValid(int userAns) {
         if (this.questionsArray.getQuestionsArray().get(this.getqCounter()).getAnswers().length == 2) {
             int optionOne = Character.getNumericValue(this.questionsArray.getQuestionsArray().get(this.getqCounter()).getAnswers()[0].charAt(0));
@@ -201,6 +201,7 @@ public class Game {
 
     }
 
+    //fifty fifty life line removes 2 incorrect options off the current question leaving remaining correct answer and 1 incorrect answer
     public Question FiftyFifty(int qcounter) {
         ArrayList<String> newAns = new ArrayList();
         ArrayList<String> falseAns = new ArrayList();
@@ -229,29 +230,39 @@ public class Game {
         return q;
     }
     
+    //pass question life line gives a new question but cannot go back to previous question or get a pass question, also does not effect prize money
     public void PassQuestion(int qcounter){
         this.setqCounter(this.getqCounter() + 1);
         
     }
-    
+    //call a friend life line, gives friends suggested answer player can choose to believe suggested answer or not
     public void CallAFriend(int qcounter) throws InterruptedException{
         String answerString  = questionsArray.getQuestionsArray().get(qcounter).getCorrectAnswer() + "";
-        System.out.println("Calling your friend ");
+        //1 in 5 chance friend is giving a random answer
+        Random rand = new Random();
+        int randNum = rand.nextInt(6) + 1;
+        if(randNum == 1){
+            answerString = rand.nextInt(4) + 1 + "";
+        }
+        
+        //prints out friends answer statement 
+        System.out.println("*Calling your friend* ");
+        for(int x = 0; x < 3; x++){
+            TimeUnit.SECONDS.sleep(1);
+            System.out.print(" .");
+        }
+        answerString = " I think that the answer is " + answerString + ". Good Luck :D \n";  
+        for(int count = 0;count < answerString.length(); count++){
+            TimeUnit.MILLISECONDS.sleep(250);
+            System.out.print(answerString.charAt(count));
+        }
         TimeUnit.SECONDS.sleep(1);
-        System.out.print(" .");
-        TimeUnit.SECONDS.sleep(1);
-        System.out.print(" .");
-        TimeUnit.SECONDS.sleep(1);
-        System.out.print(" .");
-        System.out.println(" I think that the answer is " + answerString + ". Good Luck :D");
-
     }
 
+    //selects lifeline and updates life line variables
     public void chooseLifeline() throws InterruptedException {
-
         Scanner scan = new Scanner(System.in);
-
-        boolean usedLifeline = false;
+        boolean lifelineUsed = false;
         boolean terminated = false;
         do {
             System.out.println("****\n");
@@ -270,29 +281,26 @@ public class Game {
                         case 1:
                             if (this.getffused() == false) {
                                 this.FiftyFifty(this.getqCounter());
-                                
-                                usedLifeline = true;
+                                lifelineUsed = true;
                                 this.setffused(true);                                
                             } else {
-                                System.out.println("\n You cannot used Fifty Fifty LifeLine again sorry.");
+                                System.out.println("\n You cannot use Fifty Fifty LifeLine again sorry.");
                             }
                         case 2:
                             if (this.getPassUsed() == false) {
                                 this.PassQuestion(this.getqCounter());
-                                
-                                usedLifeline = true;
+                                lifelineUsed = true;
                                 this.setPassUsed(true);                                
                             } else {
-                                System.out.println("\n You cannot used Pass Question LifeLine again sorry.");
+                                System.out.println("\n You cannot use Pass Question LifeLine again sorry.");
                             }
                         case 3:
                             if (this.getCallUsed() == false) {
                                 this.CallAFriend(this.getqCounter());
-                                
-                                usedLifeline = true;
+                                lifelineUsed = true;
                                 this.setCallused(true);                                
                             } else {
-                                System.out.println("\n You cannot used Call a Friend LifeLine again sorry.");
+                                System.out.println("\n You cannot use Call a Friend LifeLine again sorry.");
                             }
                         case 4:
                             terminated = true;
@@ -308,9 +316,7 @@ public class Game {
             if (terminated) {
                 break;
             }
-
-        } while (!usedLifeline);
-
+        } while (!lifelineUsed);
     }
     
     
