@@ -274,6 +274,7 @@ public class Game {
                             } else {
                                 System.out.println("\n You cannot use Fifty Fifty LifeLine again sorry.");
                             }
+                            break;
                         case 2:
                             if (this.getPassUsed() == false) {
                                 this.PassQuestion(this.getqCounter());
@@ -282,6 +283,7 @@ public class Game {
                             } else {
                                 System.out.println("\n You cannot use Pass Question LifeLine again sorry.");
                             }
+                            break;
                         case 3:
                             if (this.getCallUsed() == false) {
                                 this.CallAFriend(this.getqCounter());
@@ -290,8 +292,10 @@ public class Game {
                             } else {
                                 System.out.println("\n You cannot use Call a Friend LifeLine again sorry.");
                             }
+                            break;
                         case 4:
                             terminated = true;
+                            break;
                     }
                 } else {
                     System.out.println("Invalid Input, please input the  integer option corresponding to your 'lifeline' carefully");
