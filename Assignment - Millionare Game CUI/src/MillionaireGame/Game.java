@@ -101,7 +101,6 @@ public class Game {
                             this.checkAnswer(player, this.getqCounter(), userAns);
                             break;
                     }
-
                 } else {
                     System.out.println("Invalid Input, please input the  integer option corresponding to your answer carefully");
 
@@ -115,6 +114,27 @@ public class Game {
         } while (this.getGameActive());
     }
 
+     //check for valid input returns a boolean
+    public boolean isInputValid(int userAns) {
+        if (this.questionsArray.getQuestionsArray().get(this.getqCounter()).getAnswers().length == 2) {
+            int optionOne = Character.getNumericValue(this.questionsArray.getQuestionsArray().get(this.getqCounter()).getAnswers()[0].charAt(0));
+            int optionTwo = Character.getNumericValue(this.questionsArray.getQuestionsArray().get(this.getqCounter()).getAnswers()[1].charAt(0));
+            if (userAns == optionOne || userAns == optionTwo || userAns == 0) {
+                this.setIsValid(true);
+            } else {
+                this.setIsValid(false);
+            }
+        } else {
+            if (userAns > this.questionsArray.getQuestionsArray().get(this.getqCounter()).getAnswers().length || userAns < 0) {
+                this.setIsValid(false);
+            } else {
+                this.setIsValid(true);
+            }
+        }
+        return this.IsValid();
+
+    }
+    
     //walk away method ends the game and writes player data to playerdata.txt
     public void walkAway(Player player, int counter) throws IOException {
         playerArray.removeExistingPlayer(player);
@@ -179,27 +199,7 @@ public class Game {
         }
     }
 
-    //check for valid input returns a boolean
-    public boolean isInputValid(int userAns) {
-        if (this.questionsArray.getQuestionsArray().get(this.getqCounter()).getAnswers().length == 2) {
-            int optionOne = Character.getNumericValue(this.questionsArray.getQuestionsArray().get(this.getqCounter()).getAnswers()[0].charAt(0));
-            int optionTwo = Character.getNumericValue(this.questionsArray.getQuestionsArray().get(this.getqCounter()).getAnswers()[1].charAt(0));
-            if (userAns == optionOne || userAns == optionTwo || userAns == 0) {
-                this.setIsValid(true);
-            } else {
-                this.setIsValid(false);
-            }
-        } else {
-            if (userAns > this.questionsArray.getQuestionsArray().get(this.getqCounter()).getAnswers().length || userAns < 0) {
-                this.setIsValid(false);
-            } else {
-                this.setIsValid(true);
-            }
-        }
-
-        return this.IsValid();
-
-    }
+   
 
     //fifty fifty life line removes 2 incorrect options off the current question leaving remaining correct answer and 1 incorrect answer
     public Question FiftyFifty(int qcounter) {
